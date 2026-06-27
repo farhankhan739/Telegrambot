@@ -1,8 +1,6 @@
 {
-  "campaigns": {
-    "jjk": {
-      "channel_username": "@AnimeStreet_backup",
-      "destination_link": "https://t.me/+3RnRB0avwhk1OTBl"
-    }
+  "jjk": {
+    "channel_username": "@AnimeStreet_backup",
+    "destination_link": "https://t.me/+3RnRB0avwhk1OTBl"
   }
 }
