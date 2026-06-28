@@ -268,7 +268,7 @@ async def continue_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         # User has joined - send a new message with the destination
         # link as a button.
         destination_keyboard = InlineKeyboardMarkup(
-            [[InlineKeyboardButton(text="🔗 Access Link", url=destination_link)]]
+            [[InlineKeyboardButton(text="Download", url=destination_link)]]
         )
         await context.bot.send_message(
             chat_id=user.id,
