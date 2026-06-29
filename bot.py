@@ -234,8 +234,9 @@ async def continue_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
     callback_data is "verify:<campaign_key>". We re-check membership in
     the required channel:
-        - If the user has joined -> send a NEW message with the
-          destination link as a button.
+        - If the user has joined -> delete the gate message (it
+          "vanishes") and send a NEW message with the destination link
+          as a button.
         - If not -> re-send (forward again, as a new message, not an
           edit) the same welcome message with the same two buttons so
           they can try again.
@@ -265,8 +266,15 @@ async def continue_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     is_member = await check_membership(context, user.id, channel_username)
 
     if is_member:
-        # User has joined - send a new message with the destination
-        # link as a button.
+        # User has joined - delete the gate message so it vanishes from
+        # the chat, then send a new message with the destination link.
+        try:
+            await query.message.delete()
+        except (BadRequest, Forbidden) as exc:
+            # Not fatal - e.g. message already deleted, or too old to
+            # delete. Log it and continue to deliver the destination link.
+            logger.warning("Could not delete gate message for user %s: %s", user.id, exc)
+
         destination_keyboard = InlineKeyboardMarkup(
             [[InlineKeyboardButton(text="Download", url=destination_link)]]
         )
@@ -335,5 +343,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-
     main()
